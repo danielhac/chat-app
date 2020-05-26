@@ -1,4 +1,13 @@
-const socket = io('https://danhac-chat-app.herokuapp.com')
+/* 
+ * This is the client-side of the chat application.
+ * 
+ * It uses Mustache for templating the usernames and room on the side bar and
+ * username, messages, and timestamp for the chat area.
+ * 
+*/
+
+// const socket = io('https://danhac-chat-app.herokuapp.com')
+const socket = io()
 
 // Form elements
 const $messageForm = document.getElementById('message-form')
@@ -6,7 +15,7 @@ const $messageFormInput = $messageForm.getElementsByTagName('input')[0]
 const $messageFormButton = $messageForm.getElementsByTagName('button')[0]
 const $messages = document.getElementById('messages')
 
-// Templates
+// Templates for Mustache
 const messageTemplate = document.getElementById('message-template').innerHTML
 const sidebarTemplate = document.getElementById('sidebar-template').innerHTML
 
@@ -14,7 +23,7 @@ const sidebarTemplate = document.getElementById('sidebar-template').innerHTML
 const username = location.search.substr(1).split('&')[0].split('=')[1]
 const room =     location.search.substr(1).split('&')[1].split('=')[1]
 
-// Autoscroll
+// Autoscroll feature
 const autoscroll = () => {
     // New message element
     const $newMessage = $messages.lastElementChild
@@ -30,14 +39,16 @@ const autoscroll = () => {
     // Height of messages container
     const containerHeight = $messages.scrollHeight
 
-    // How far have I scrolled?
+    // Distance from where user scrolled and the visible height
     const scrollOffset = $messages.scrollTop + visibleHeight
 
+    // Auto scrolls if at bottom of chat area
     if (containerHeight - newMessageHeight <= scrollOffset) {
         $messages.scrollTop = $messages.scrollHeight
     }
 }
 
+// Renders the message, username and timestamp
 socket.on('message', (msg) => {
     const html = Mustache.render(messageTemplate, {
         username: msg.username,
@@ -48,6 +59,7 @@ socket.on('message', (msg) => {
     autoscroll()
 })
 
+// Renders room name and all users
 socket.on('roomData', ({ room, users }) => {
     const html = Mustache.render(sidebarTemplate, {
         room,
@@ -56,18 +68,20 @@ socket.on('roomData', ({ room, users }) => {
     document.getElementById('sidebar').innerHTML = html
 })
 
+// Event listener for client-side send message button in a room
+// Calls function to send message from the message input field
 $messageForm.addEventListener('submit', (e) => {
     e.preventDefault()
     $messageFormButton.setAttribute('disabled', 'disabled')
     socket.emit('sendMessage', e.target.elements.message.value, (acknowledge) => {
-        console.log('Message delivered', acknowledge);
+        console.log(acknowledge);
         $messageFormButton.removeAttribute('disabled')
         $messageFormInput.value = ''
         $messageFormInput.focus()
-
     })
 })
 
+// Calls server-side to join a room using info on client-side
 socket.emit('join', { username, room }, (error) => {
     if (error) {
         alert(error)

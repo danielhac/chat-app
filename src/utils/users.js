@@ -1,12 +1,13 @@
+// All users from all rooms
 const users = []
 
+// Add a user
 const addUser = ({ id, username, room }) => {
-    username = username.trim().toLowerCase()
-    room = room.trim().toLowerCase()
-
     if (!username || !room) {
         return { error: 'Username and room are required' }
     }
+    username = username.trim().toLowerCase()
+    room = room.trim().toLowerCase()
 
     // Check for existing user
     const existingUser = users.find((user) => {
@@ -24,6 +25,7 @@ const addUser = ({ id, username, room }) => {
     return { user }
 }
 
+// Removes a user
 const removeUser = (id) => {
     const index = users.findIndex((user) => user.id === id)
     if (index !== -1) {
@@ -31,10 +33,12 @@ const removeUser = (id) => {
     }
 }
 
+// Get a user
 const getUser = (id) => {
     return users.find((user) => user.id === id)
 }
 
+// Get all users within a particular room
 const getUsersInRoom = (room) => {
     return users.filter((user) => user.room === room)
 }
