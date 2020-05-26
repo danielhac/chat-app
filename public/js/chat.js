@@ -1,4 +1,4 @@
-const socket = io()
+const socket = io('https://danhac-chat-app.herokuapp.com')
 
 // Form elements
 const $messageForm = document.getElementById('message-form')
