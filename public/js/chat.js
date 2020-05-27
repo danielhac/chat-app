@@ -6,8 +6,11 @@
  * 
 */
 
-// const socket = io('https://danhac-chat-app.herokuapp.com')
-const socket = io()
+// Production
+const socket = io('https://danhac-chat-app.herokuapp.com')
+
+// Local
+// const socket = io()
 
 // Form elements
 const $messageForm = document.getElementById('message-form')
@@ -87,4 +90,9 @@ socket.emit('join', { username, room }, (error) => {
         alert(error)
         location.href = '/'
     }
+    
+    // Callback will remove loaders and display main body
+    document.getElementById('loader').style.display = 'none'
+    document.getElementById('loader-text').style.display = 'none'
+    document.getElementsByClassName('chat')[0].style.display = 'flex'
 })
