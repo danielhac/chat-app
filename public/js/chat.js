@@ -9,7 +9,7 @@
 // Production
 const socket = io('https://danhac-chat-app.herokuapp.com')
 
-// Local
+// Local Development
 // const socket = io()
 
 // Form elements

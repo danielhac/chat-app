@@ -43,9 +43,21 @@ const getUsersInRoom = (room) => {
     return users.filter((user) => user.room === room)
 }
 
+// Get all rooms by obtaining room property in users array
+const getAllRooms = () => {
+    const rooms = []
+    users.forEach(user => {
+        if (!rooms.includes(user.room)) {
+            rooms.push(user.room)
+        }
+    });
+    return rooms
+}
+
 module.exports = {
     addUser,
     removeUser,
     getUser,
-    getUsersInRoom
+    getUsersInRoom,
+    getAllRooms
 }

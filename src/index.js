@@ -11,7 +11,7 @@ const http = require('http')
 const express = require('express')
 const socketio = require('socket.io')
 const { generateMessage } = require('./utils/messages')
-const { addUser, removeUser, getUser, getUsersInRoom } = require('./utils/users')
+const { addUser, removeUser, getUser, getUsersInRoom, getAllRooms } = require('./utils/users')
 
 const app = express()
 const server = http.createServer(app)
@@ -58,6 +58,13 @@ io.on('connection', (socket) => {
         const user = getUser(socket.id)
         io.to(user.room).emit('message', generateMessage(user.username, msg))
         callback('Delivered')
+    })
+
+    // Handles obtaining all room names
+    socket.on('getRooms', callback => {
+        const rooms = getAllRooms()
+        // Return control back to calling function
+        callback(rooms)
     })
 
     // Handles disconnection / logoff

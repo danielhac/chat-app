@@ -13,10 +13,26 @@
             <p id="subtitle">Create or join a room.</p>
             <form action="chat.html">
                 <input type="text" name="username" placeholder="Name" required>
-                <input type="text" name="room" placeholder="Room" required>
-                <button>Join</button>
+                <input type="text" name="room" id="room" placeholder="Room" required>
+
+                <button id="join">Join</button>
             </form>
         </div>
     </div>
+
+    <script id="rooms-template" type="text/html">
+        <select name="rooms" id="rooms">
+            <option value='asdf'>Choose an active room</option>
+            {{#rooms}}
+                <option value={{.}}>{{.}}</option>
+            {{/rooms}}
+        </select>
+            
+
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.slim.js"></script>
+    <script src="js/rooms.js"></script>
 </body>
 </html>

@@ -91,6 +91,12 @@ button:disabled {
     width: 100%;
 }
 
+select#rooms {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
 /* Chat Page Layout */
 
 .chat {
